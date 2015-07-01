@@ -2,6 +2,7 @@
 #include<sys/socket.h>
 #include<netinet/in.h>
 #include<stdio.h>
+#include<time.h>
 #include<string.h>
 
 #define BUFFERSIZE 1000
@@ -21,8 +22,12 @@ int main(int argc, char *argv[]){
 
 	int addrlen = sizeof(UdpClientAddr);
 	char Buffer[BUFFERSIZE];
+	bzero(Buffer, BUFFERSIZE);
+	time_t ComTime;
 	while(1){
 		recvfrom(UdpServerSocket,Buffer,BUFFERSIZE, 0, (struct sockaddr *)&UdpClientAddr, &addrlen);
+		time(&ComTime);
+		printf("Get input At %s  %s\n", ctime(&ComTime), Buffer);
 		sendto(UdpServerSocket, Buffer, strlen(Buffer), 0, (struct sockaddr *)&UdpClientAddr, addrlen);
 		printf("Finish one loop\n");
 	}
